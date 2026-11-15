@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ControlaNF</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>ControlaNF</h1>
+    <p>Controle de notas fiscais</p>
+  </header>
+
+  <main>
+    <section class="cartao">
+      <h2>Cadastrar nota fiscal</h2>
+      <form id="formulario" novalidate>
+        <label for="numero">Número da nota</label>
+        <input type="text" id="numero" autocomplete="off">
+
+        <label for="emitente">Emitente</label>
+        <input type="text" id="emitente" autocomplete="off">
+
+        <label for="dataEmissao">Data de emissão</label>
+        <input type="date" id="dataEmissao">
+
+        <label for="valor">Valor (R$)</label>
+        <input type="number" id="valor" step="0.01" min="0">
+
+        <div id="erros" class="erros" hidden></div>
+
+        <button type="submit">Cadastrar</button>
+      </form>
+    </section>
+
+    <section class="cartao">
+      <h2>Notas cadastradas</h2>
+      <p id="vazio">Nenhuma nota cadastrada ainda.</p>
+      <table id="tabela" hidden>
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Emitente</th>
+            <th>Emissão</th>
+            <th>Valor</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="corpo-tabela"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="js/notas.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
