@@ -1,0 +1,103 @@
+const STATUS_VALIDOS = ['Pendente', 'Emitida', 'Paga', 'Cancelada'];
+
+function hojeISO() {
+  const agora = new Date();
+  const ano = agora.getFullYear();
+  const mes = String(agora.getMonth() + 1).padStart(2, '0');
+  const dia = String(agora.getDate()).padStart(2, '0');
+  return ano + '-' + mes + '-' + dia;
+}
+
+function validarNota(dados) {
+  const erros = [];
+
+  if (!dados.numero || String(dados.numero).trim() === '') {
+    erros.push('Informe o número da nota.');
+  }
+
+  if (!dados.emitente || String(dados.emitente).trim() === '') {
+    erros.push('Informe o emitente.');
+  }
+
+  if (!dados.dataEmissao) {
+    erros.push('Informe a data de emissão.');
+  } else if (dados.dataEmissao > hojeISO()) {
+    erros.push('A data de emissão não pode ser futura.');
+  }
+
+  const valor = Number(dados.valor);
+  if (!(valor > 0)) {
+    erros.push('O valor deve ser maior que zero.');
+  }
+
+  return erros;
+}
+
+function proximoId(lista) {
+  let maior = 0;
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i].id > maior) {
+      maior = lista[i].id;
+    }
+  }
+  return maior + 1;
+}
+
+function buscarNota(lista, id) {
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i].id === id) {
+      return lista[i];
+    }
+  }
+  return null;
+}
+
+function cadastrarNota(lista, dados) {
+  const erros = validarNota(dados);
+  if (erros.length > 0) {
+    return { ok: false, erros: erros };
+  }
+
+  const nota = {
+    id: proximoId(lista),
+    numero: String(dados.numero).trim(),
+    emitente: String(dados.emitente).trim(),
+    dataEmissao: dados.dataEmissao,
+    valor: Number(dados.valor),
+    status: 'Pendente'
+  };
+
+  lista.push(nota);
+  return { ok: true, erros: [], nota: nota };
+}
+
+function alterarStatus(lista, id, novoStatus) {
+  const nota = buscarNota(lista, id);
+
+  if (nota === null) {
+    return { ok: false, erro: 'Nota não encontrada.' };
+  }
+
+  if (STATUS_VALIDOS.indexOf(novoStatus) === -1) {
+    return { ok: false, erro: 'Status inválido.' };
+  }
+
+  if (nota.status === 'Cancelada') {
+    return { ok: false, erro: 'Nota cancelada não pode mudar de status.' };
+  }
+
+  nota.status = novoStatus;
+  return { ok: true, nota: nota };
+}
+
+if (typeof module !== 'undefined') {
+  module.exports = {
+    STATUS_VALIDOS,
+    hojeISO,
+    validarNota,
+    proximoId,
+    buscarNota,
+    cadastrarNota,
+    alterarStatus
+  };
+}
