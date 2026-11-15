@@ -8,29 +8,53 @@ function hojeISO() {
   return ano + '-' + mes + '-' + dia;
 }
 
-function validarNota(dados) {
-  const erros = [];
-
-  if (!dados.numero || String(dados.numero).trim() === '') {
-    erros.push('Informe o número da nota.');
+class NotaFiscal {
+  constructor(id, numero, emitente, dataEmissao, valor, status) {
+    this.id = id;
+    this.numero = String(numero).trim();
+    this.emitente = String(emitente).trim();
+    this.dataEmissao = dataEmissao;
+    this.valor = Number(valor);
+    this.status = status || 'Pendente';
   }
 
-  if (!dados.emitente || String(dados.emitente).trim() === '') {
-    erros.push('Informe o emitente.');
+  alterarStatus(novoStatus) {
+    if (STATUS_VALIDOS.indexOf(novoStatus) === -1) {
+      return { ok: false, erro: 'Status inválido.' };
+    }
+
+    if (this.status === 'Cancelada') {
+      return { ok: false, erro: 'Nota cancelada não pode mudar de status.' };
+    }
+
+    this.status = novoStatus;
+    return { ok: true };
   }
 
-  if (!dados.dataEmissao) {
-    erros.push('Informe a data de emissão.');
-  } else if (dados.dataEmissao > hojeISO()) {
-    erros.push('A data de emissão não pode ser futura.');
-  }
+  static validar(dados) {
+    const erros = [];
 
-  const valor = Number(dados.valor);
-  if (!(valor > 0)) {
-    erros.push('O valor deve ser maior que zero.');
-  }
+    if (!dados.numero || String(dados.numero).trim() === '') {
+      erros.push('Informe o número da nota.');
+    }
 
-  return erros;
+    if (!dados.emitente || String(dados.emitente).trim() === '') {
+      erros.push('Informe o emitente.');
+    }
+
+    if (!dados.dataEmissao) {
+      erros.push('Informe a data de emissão.');
+    } else if (dados.dataEmissao > hojeISO()) {
+      erros.push('A data de emissão não pode ser futura.');
+    }
+
+    const valor = Number(dados.valor);
+    if (!(valor > 0)) {
+      erros.push('O valor deve ser maior que zero.');
+    }
+
+    return erros;
+  }
 }
 
 function proximoId(lista) {
@@ -53,19 +77,18 @@ function buscarNota(lista, id) {
 }
 
 function cadastrarNota(lista, dados) {
-  const erros = validarNota(dados);
+  const erros = NotaFiscal.validar(dados);
   if (erros.length > 0) {
     return { ok: false, erros: erros };
   }
 
-  const nota = {
-    id: proximoId(lista),
-    numero: String(dados.numero).trim(),
-    emitente: String(dados.emitente).trim(),
-    dataEmissao: dados.dataEmissao,
-    valor: Number(dados.valor),
-    status: 'Pendente'
-  };
+  const nota = new NotaFiscal(
+    proximoId(lista),
+    dados.numero,
+    dados.emitente,
+    dados.dataEmissao,
+    dados.valor
+  );
 
   lista.push(nota);
   return { ok: true, erros: [], nota: nota };
@@ -78,23 +101,14 @@ function alterarStatus(lista, id, novoStatus) {
     return { ok: false, erro: 'Nota não encontrada.' };
   }
 
-  if (STATUS_VALIDOS.indexOf(novoStatus) === -1) {
-    return { ok: false, erro: 'Status inválido.' };
-  }
-
-  if (nota.status === 'Cancelada') {
-    return { ok: false, erro: 'Nota cancelada não pode mudar de status.' };
-  }
-
-  nota.status = novoStatus;
-  return { ok: true, nota: nota };
+  return nota.alterarStatus(novoStatus);
 }
 
 if (typeof module !== 'undefined') {
   module.exports = {
     STATUS_VALIDOS,
     hojeISO,
-    validarNota,
+    NotaFiscal,
     proximoId,
     buscarNota,
     cadastrarNota,
