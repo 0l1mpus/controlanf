@@ -1,0 +1,9 @@
+{
+  "name": "controlanf",
+  "version": "1.0.0",
+  "description": "Controle simples de notas fiscais - projeto Operação Deploy (ES46B)",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  }
+}
