@@ -4,6 +4,7 @@
   "description": "Controle simples de notas fiscais - projeto Operação Deploy (ES46B)",
   "private": true,
   "scripts": {
+    "build": "node scripts/verificar-build.js",
     "test": "node --test"
   }
 }
