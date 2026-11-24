@@ -15,7 +15,7 @@ class NotaFiscal {
     this.emitente = String(emitente).trim();
     this.dataEmissao = dataEmissao;
     this.valor = Number(valor);
-    this.status = status || 'Pendente';
+    this.status = status || 'Emitida';
   }
 
   alterarStatus(novoStatus) {
