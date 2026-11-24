@@ -75,3 +75,57 @@ test('não permite alterar o status de nota cancelada', function () {
   assert.strictEqual(resultado.erro, 'Nota cancelada não pode mudar de status.');
   assert.strictEqual(lista[0].status, 'Cancelada');
 });
+
+test('rejeita nota sem emitente', function () {
+  const lista = [];
+  const dados = dadosValidos();
+  dados.emitente = '';
+
+  const resultado = regras.cadastrarNota(lista, dados);
+
+  assert.strictEqual(resultado.ok, false);
+  assert.ok(resultado.erros.includes('Informe o emitente.'));
+  assert.strictEqual(lista.length, 0);
+});
+
+test('rejeita nota sem data de emissão', function () {
+  const lista = [];
+  const dados = dadosValidos();
+  dados.dataEmissao = '';
+
+  const resultado = regras.cadastrarNota(lista, dados);
+
+  assert.strictEqual(resultado.ok, false);
+  assert.ok(resultado.erros.includes('Informe a data de emissão.'));
+  assert.strictEqual(lista.length, 0);
+});
+
+test('rejeita alteração para status inválido', function () {
+  const lista = [];
+  const cadastro = regras.cadastrarNota(lista, dadosValidos());
+
+  const resultado = regras.alterarStatus(lista, cadastro.nota.id, 'Invalido');
+
+  assert.strictEqual(resultado.ok, false);
+  assert.strictEqual(resultado.erro, 'Status inválido.');
+  assert.strictEqual(lista[0].status, 'Pendente');
+});
+
+test('rejeita alteração de nota inexistente', function () {
+  const lista = [];
+
+  const resultado = regras.alterarStatus(lista, 999, 'Paga');
+
+  assert.strictEqual(resultado.ok, false);
+  assert.strictEqual(resultado.erro, 'Nota não encontrada.');
+});
+
+test('permite alterar nota pendente para paga', function () {
+  const lista = [];
+  const cadastro = regras.cadastrarNota(lista, dadosValidos());
+
+  const resultado = regras.alterarStatus(lista, cadastro.nota.id, 'Paga');
+
+  assert.strictEqual(resultado.ok, true);
+  assert.strictEqual(lista[0].status, 'Paga');
+});
