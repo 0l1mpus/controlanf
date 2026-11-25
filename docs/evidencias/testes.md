@@ -70,13 +70,13 @@ auxiliam na identificação de problemas no código.
 
 ## Evidências
 
-- [Testes iniciais](evidencias/testes/04-testes-iniciais.png)
-- [Testes ampliados](evidencias/testes/05-testes-ampliados.png)
-- [Execução da CI](evidencias/testes/06-ci-testes-ampliados.png)
-- [Falha local](evidencias/testes/07-falha-testes-locais.png)
-- [Pull Request com falha](evidencias/testes/08-pull-request-falha.png)
-- [Falha na CI](evidencias/testes/09-ci-falha.png)
-- [Testes corrigidos](evidencias/testes/10-testes-corrigidos.png)
-- [Pull Request corrigido](evidencias/testes/11-pull-request-corrigido.png)
-- [Recuperação da CI](evidencias/testes/12-ci-recuperada.png)
-- [Histórico das pipelines](evidencias/testes/13-historico-pipelines.png)
+- [Testes iniciais](testes/04-testes-iniciais.png)
+- [Testes ampliados](testes/05-testes-ampliados.png)
+- [Execução da CI](testes/06-ci-testes-ampliados.png)
+- [Falha local](testes/07-falha-testes-locais.png)
+- [Pull Request com falha](testes/08-pull-request-falha.png)
+- [Falha na CI](testes/09-ci-falha.png)
+- [Testes corrigidos](testes/10-testes-corrigidos.png)
+- [Pull Request corrigido](testes/11-pull-request-corrigido.png)
+- [Recuperação da CI](testes/12-ci-recuperada.png)
+- [Histórico das pipelines](testes/13-historico-pipelines.png)
