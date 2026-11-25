@@ -68,6 +68,24 @@ Com essa atividade, foi possível verificar na prática
 como os testes automatizados e a integração contínua
 auxiliam na identificação de problemas no código.
 
+## Bloqueio da publicação no CD
+
+Para verificar o funcionamento do CD, foi realizada uma alteração
+proposital no código, modificando o status inicial das notas
+fiscais de Pendente para Emitida.
+
+A alteração foi enviada para a branch main, fazendo com que
+dois dos dez testes automatizados falhassem. Com isso, a
+pipeline CD apresentou falha e a etapa de publicação no
+GitHub Pages não foi executada.
+
+Em seguida, foi utilizado o comando git revert para desfazer
+a alteração. Após o envio da correção, os testes passaram
+novamente e a publicação foi realizada com sucesso.
+
+Dessa forma, foi possível comprovar que a pipeline impede
+a publicação de uma versão que apresenta falhas nos testes.
+
 ## Evidências
 
 - [Testes iniciais](testes/04-testes-iniciais.png)
@@ -80,3 +98,5 @@ auxiliam na identificação de problemas no código.
 - [Pull Request corrigido](testes/11-pull-request-corrigido.png)
 - [Recuperação da CI](testes/12-ci-recuperada.png)
 - [Histórico das pipelines](testes/13-historico-pipelines.png)
+- [Publicação bloqueada no CD](testes/14-cd-publicacao-bloqueada.png)
+- [Publicação restaurada no CD](testes/15-cd-publicacao-restaurada.png)
